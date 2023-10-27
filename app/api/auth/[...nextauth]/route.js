@@ -1,14 +1,15 @@
-import type { NextAuthOptions } from "next-auth";
+
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../../utils/connect";
 import bcrypt from "bcryptjs";
+import NextAuth from "next-auth/next";
 
-export const options: NextAuthOptions = {
+const handler = NextAuth ({
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      surname: "Credentials",
       credentials: {
+      
         email: {
           label: "email",
           type: "text",
@@ -29,22 +30,23 @@ export const options: NextAuthOptions = {
             email: credentials.email,
           },
         });
-
+      
         if (!user || !user?.password) {
-          throw new Error("User not found");
+          throw Error("User not found");
         }
-
+      
         const isCorrectedPassword = await bcrypt.compare(
           credentials.password,
           user.password
         );
-
+      
         if (!isCorrectedPassword) {
           throw new Error("Email or password is incorrect");
         }
-
+      
         return user;
-      },
+      } 
+      
     }),
   ],
   pages: {
@@ -70,4 +72,6 @@ export const options: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
-};
+});
+
+export { handler as GET, handler as POST };
