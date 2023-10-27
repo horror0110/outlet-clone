@@ -67,6 +67,7 @@ const RegisterPage = () => {
               ? "mb-3 input input-bordered w-full border border-red-500  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
               : "mb-3 input input-bordered w-full  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
           }
+          value={user.surname}
         />
         <input
           onChange={(e) => setUser({ ...user, name: e.target.value })}
@@ -77,6 +78,7 @@ const RegisterPage = () => {
               ? "mb-3 input input-bordered w-full border border-red-500  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
               : "mb-3 input input-bordered w-full  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
           }
+          value={user.name}
         />
         <input
           onChange={(e) => setUser({ ...user, email: e.target.value })}
@@ -87,6 +89,7 @@ const RegisterPage = () => {
               ? "mb-3 input input-bordered w-full border border-red-500  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
               : "mb-3 input input-bordered w-full  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
           }
+          value={user.email}
         />
         <input
           onChange={(e) => setUser({ ...user, password: e.target.value })}
@@ -97,6 +100,7 @@ const RegisterPage = () => {
               ? "input input-bordered w-full border border-red-500  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
               : "input input-bordered w-full  placeholder:text-mainColor focus:border-warning focus:border-[2px]"
           }
+          value={user.password}
         />
         <button
           onClick={Register}

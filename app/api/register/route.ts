@@ -1,11 +1,11 @@
 import prisma from "../../libs/prismadb";
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 export const POST = async (request: Request) => {
-  const { name, email, password, surname } = await request.json();
+  const { name, surname, email, password } = await request.json();
 
   if (!name || !surname || !email || !password) {
     return NextResponse.json(
