@@ -3,6 +3,9 @@ const nextConfig = {
     images: {
         domains: ['www.outlet.mn'],
       },
+      experimental: {
+        serverActions: true,
+      },
 }
 
 module.exports = nextConfig
