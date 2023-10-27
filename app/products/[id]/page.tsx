@@ -38,7 +38,7 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="mx-10 my-10">
+    <div className="mx-10 mb-10 mt-48">
       <div className="flex gap-10">
         <div className="flex gap-16 w-[50%] border rounded-sm p-5 border-gray-300 ">
           <div className="flex flex-col gap-2">

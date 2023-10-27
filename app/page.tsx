@@ -5,7 +5,7 @@ import Product from "@/components/Product";
 export default function Home() {
   return (
       <div className="mx-10">
-        <div className="my-10">
+        <div className="my-10 mt-48">
 
         <Hero/>
 

@@ -31,6 +31,7 @@ const Product = () => {
   };
   return (
     <div>
+      <h1 className="ml-10 mb-5 text-mainColor text-2xl font-semibold">Сүүлийн үеийн чиг хандлага</h1>
       <Swiper
         breakpoints={{
           // When window width is >= 640px
