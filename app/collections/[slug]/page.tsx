@@ -55,7 +55,7 @@ const CategoryPage = () => {
 
           <div className="grid grid-cols-4 gap-5 mt-2">
             {data.map((product: any, index: number) => (
-              <div className="w-[230px] mx-auto h-auto border p-5">
+              <div key={product.id} className="w-[230px] mx-auto h-auto border p-5">
                 <Link href={`/products/${product.id}`}>
                   <div className="relative w-full h-[200px]">
                     <Image

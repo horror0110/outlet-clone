@@ -68,8 +68,8 @@ const Product = () => {
       >
         <div className="">
           {data.map((product: any, index: number) => (
-            <SwiperSlide key={product.id}>
-              <div className="w-[250px] mx-auto h-auto border p-5">
+            <SwiperSlide key={index}>
+              <div key={product.id} className="w-[250px] mx-auto h-auto border p-5">
                 <Link href={`/products/${product.id}`}>
                   <div className="relative w-full h-[200px]">
                     <Image
