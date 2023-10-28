@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import data from "../utils/data.json";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -11,6 +10,16 @@ const thousandify = require("thousandify");
 
 const Product = () => {
   const [swiper, setSwiper] = useState<any>(null);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/products", {
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((err) => console.log(err));
+  }, []);
 
   const star = (starNumber: number) => {
     const stars = [];
@@ -31,7 +40,9 @@ const Product = () => {
   };
   return (
     <div>
-      <h1 className="ml-10 mb-5 text-mainColor text-2xl font-semibold">Сүүлийн үеийн чиг хандлага</h1>
+      <h1 className="ml-10 mb-5 text-mainColor text-2xl font-semibold">
+        Сүүлийн үеийн чиг хандлага
+      </h1>
       <Swiper
         breakpoints={{
           // When window width is >= 640px

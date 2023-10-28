@@ -1,4 +1,4 @@
-import { db } from "@/app/libs/prismadb";
+import prisma from "../../libs/prismadb";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
@@ -21,7 +21,7 @@ export const POST = async (request: Request) => {
     );
   }
 
-  const duplicateEmail = await db.user.findUnique({
+  const duplicateEmail = await prisma.user.findUnique({
     where: { email: email },
   });
 
@@ -35,7 +35,7 @@ export const POST = async (request: Request) => {
   const hashedPassword = await bcrypt.hash(password, 12);
 
   try {
-    const user = await db.user.create({
+    const user = await prisma.user.create({
       data: {
         name,
         surname,

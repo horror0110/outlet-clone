@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import data from "../../../utils/data.json";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
@@ -12,10 +11,18 @@ import Product from "@/components/Product";
 
 const thousandify = require("thousandify");
 
-const ProductPage = () => {
+const ProductPage = ({ params }: any) => {
   const [activeImage, setActiveImage] = useState(0);
+  const [data, setData] = useState<any>("");
 
   const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    fetch(`/api/products/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((err) => console.log(err));
+  }, [params]);
 
   const handleIncrement = () => {
     setValue(value + 1);
@@ -42,35 +49,44 @@ const ProductPage = () => {
       <div className="flex gap-10">
         <div className="flex gap-16 w-[50%] border rounded-sm p-5 border-gray-300 ">
           <div className="flex flex-col gap-2">
-            {data[0].images.map((images: any, index: number) => (
-              <Image
-                key={index}
-                onClick={() => setActiveImage(index)}
-                src={images}
-                alt="images"
-                width={100}
-                height={100}
-                className={
-                  activeImage === index ? "border-[2px] border-warning" : ""
-                }
-              />
-            ))}
+            <div>
+              {data ? (
+                data.images.map((image: any, index: number) => (
+                  <Image
+                    key={index}
+                    onClick={() => setActiveImage(index)}
+                    src={image}
+                    alt="images"
+                    width={100}
+                    height={100}
+                    className={
+                      activeImage === index ? "border-[2px] border-warning" : ""
+                    }
+                  />
+                ))
+              ) : (
+                <p>Loading...</p>
+              )}
+            </div>
           </div>
-
-          <Zoom>
-            <Image
-              alt="That Wanaka Tree, New Zealand by Laura Smetsers"
-              src={data[0].images[activeImage]}
-              width="400"
-              height="400"
-            />
-          </Zoom>
+          {data ? (
+            <Zoom>
+              <Image
+                alt="That Wanaka Tree, New Zealand by Laura Smetsers"
+                src={data.images[activeImage]}
+                width="400"
+                height="400"
+              />
+            </Zoom>
+          ) : (
+            <p>loading...</p>
+          )}
         </div>
 
         <div className="border w-[50%] border-gray-300 p-5 rounded-sm ">
-          <h1 className="text-mainColor text-2xl mb-5">{data[0].title}</h1>
+          <h1 className="text-mainColor text-2xl mb-5">{data.title}</h1>
           <span className="bg-black text-white rounded-md px-2 py-1 text-sm">
-            {data[0].savings}% хэмнэнэ
+            {data.savings}% хэмнэнэ
           </span>
 
           <div className="text-white flex items-center gap-2 mt-5">
@@ -94,11 +110,9 @@ const ProductPage = () => {
 
             <div className="flex items-center gap-3">
               <span className="text-xl font-semibold">
-                {thousandify(data[0].price)}₮
+                {thousandify(data.price)}₮
               </span>
-              <s className="text-mainColor">
-                {thousandify(data[0].salePrice)}₮
-              </s>
+              <s className="text-mainColor">{thousandify(data.salePrice)}₮</s>
             </div>
           </div>
 
@@ -131,7 +145,9 @@ const ProductPage = () => {
           </button>
 
           <div className="mt-5 flex items-center">
-            <span className="flex items-center">Үнэлгээ: {star(data[0].star)}</span>
+            <span className="flex items-center">
+              Үнэлгээ: {star(data.star)}
+            </span>
           </div>
         </div>
       </div>
@@ -139,13 +155,14 @@ const ProductPage = () => {
       <div className="text-mainColor  w-[50%] flex flex-col  mt-10 border border-gray-300 rounded-md p-5">
         <h1 className="text-xl mb-5">Бүтээгдэхүүний тайлбар</h1>
 
-        <p className="">{data[0].description}</p>
-
+        <p className="">{data.description}</p>
       </div>
 
       <div>
-          <h1 className="text-2xl text-mainColor mt-10 mb-5 ml-10">Санал болгох</h1>
-          <Product/>
+        <h1 className="text-2xl text-mainColor mt-10 mb-5 ml-10">
+          Санал болгох
+        </h1>
+        <Product />
       </div>
     </div>
   );

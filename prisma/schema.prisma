@@ -14,6 +14,26 @@ model User {
   id       String  @id @default(cuid()) @map("_id")
   surname  String
   name     String?
-  email    String? @unique  
+  email    String? @unique
   password String?
+}
+
+model Category {
+  id    String  @id @default(cuid()) @map("_id")
+  title String?
+  slug  String
+}
+
+model Product {
+  id          String   @id @default(cuid()) @map("_id")
+  category    String?
+  savings     Int?
+  star        Int?
+  color       String[]
+  price       Int?
+  salePrice   Int?
+  balance     Boolean?
+  title       String?
+  description String?
+  images      String[]
 }

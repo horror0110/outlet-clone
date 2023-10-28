@@ -1,11 +1,23 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { GiGymBag } from "react-icons/gi";
 
 import Dropdown from "./Dropdown";
 
-const Navbar = () => {
+const getData = async () => {
+  const res = await fetch("http://localhost:3000/api/categories", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed");
+  }
+
+  return res.json();
+};
+
+const Navbar = async () => {
+  const data = await getData();
   return (
     <div className="flex flex-col fixed top-0 left-0 w-full z-50">
       <div className="bg-[#232f3e] h-[110px] flex justify-between items-center px-10 ">
@@ -39,15 +51,15 @@ const Navbar = () => {
       </div>
 
       <div className="bg-white flex items-center px-10 gap-8 h-[70px]  text-md text-slate-800 border-b ">
-        <Link className="hover:text-warning transition" href="/">
-          Нүүр хуудас
-        </Link>
-        <Link className="hover:text-warning transition" href="/">
-          Зөвхөн өнөөдөр хямдарсан
-        </Link>
-        <Link className="hover:text-warning transition" href="/">
-          Сүүлийн үеийн тренд
-        </Link>
+        {data.map((el: any, index: number) => (
+          <Link
+            key={el.id}
+            className="hover:text-warning transition"
+            href={el.slug==="/" ? "/" : `/collections/${el.slug}`}
+          >
+            {el.title}
+          </Link>
+        ))}
       </div>
     </div>
   );
