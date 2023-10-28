@@ -1,23 +1,21 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { GiGymBag } from "react-icons/gi";
 
 import Dropdown from "./Dropdown";
+import { useEffect, useState } from "react";
 
-const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed");
-  }
-
-  return res.json();
-};
-
-const Navbar = async () => {
-  const data = await getData();
+const Navbar = () => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("/api/categories", {
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div className="flex flex-col fixed top-0 left-0 w-full z-50">
       <div className="bg-[#232f3e] h-[110px] flex justify-between items-center px-10 ">
@@ -55,7 +53,7 @@ const Navbar = async () => {
           <Link
             key={el.id}
             className="hover:text-warning transition"
-            href={el.slug==="/" ? "/" : `/collections/${el.slug}`}
+            href={el.slug === "/" ? "/" : `/collections/${el.slug}`}
           >
             {el.title}
           </Link>
