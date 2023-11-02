@@ -37,16 +37,14 @@ const CartPage = () => {
 
   useEffect(() => {
     setSpinner(true);
-    fetch(`/api/cart/${email}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
+    fetch(`/api/checkout/${email}`)
       .then((response) => response.json())
       .then((data) => {
         setSpinner(false);
         setData(data.data);
-      });
-  }, [session]);
+      })
+      .catch((err) => console.log(err));
+  }, [email, setSpinner]);
 
   const total = calculateTotalPrice(data);
 
