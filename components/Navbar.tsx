@@ -5,9 +5,11 @@ import { GiGymBag } from "react-icons/gi";
 
 import Dropdown from "./Dropdown";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const [data, setData] = useState([]);
+  const {data:session , status} = useSession();
   useEffect(() => {
     fetch("/api/categories", {
       headers: { "content-type": "application/json" },
@@ -30,13 +32,13 @@ const Navbar = () => {
         </Link>
 
         <Dropdown />
-
-        <div className="flex gap-2 text-[#a3afef]">
+          {status === "unauthenticated" ?     <div className="flex gap-2 text-[#a3afef]">
           <Link href="/login">Нэвтрэх</Link>|
           <Link href="/register">Бүртгүүлэх</Link>
-        </div>
+        </div> : <span className="text-white"><span className="text-warning">Сайн байна уу?</span> {session?.user.name}</span>}
+    
 
-        <div className="flex items-center gap-3">
+        <Link href="/cart" className="flex items-center gap-3">
           <div className="relative">
             <GiGymBag color="white" size={25} />
             <span className="text-white absolute right-[-5px] top-[-15px] bg-warning rounded-full px-1   ">
@@ -45,7 +47,7 @@ const Navbar = () => {
           </div>
 
           <span className="text-white">Сагс</span>
-        </div>
+        </Link>
       </div>
 
       <div className="bg-white flex items-center px-10 gap-8 h-[70px]  text-md text-slate-800 border-b ">

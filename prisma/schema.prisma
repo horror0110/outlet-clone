@@ -36,4 +36,34 @@ model Product {
   title       String?
   description String?
   images      String[]
+  cartId      String?
+}
+
+model Cart {
+  id          String   @id @default(cuid()) @map("_id")
+  category    String
+  savings     Int
+  star        Int
+  color       String[]
+  price       Int
+  quantity    Int?
+  salePrice   Int
+  balance     Boolean
+  title       String
+  description String
+  images      String[]
+  email       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Checkout {
+  id String @id @default(cuid()) @map("_id")
+  email String
+  totalPrice Int
+  title      String
+  quantity   Int
+  price      Int
+  productPrice Int
+  image String
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
@@ -8,6 +8,10 @@ import { BsPinterest } from "react-icons/bs";
 import { AiOutlineMail } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 import Product from "@/components/Product";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { GlobalContext } from "@/context/GlobalContext";
 
 const thousandify = require("thousandify");
 
@@ -15,13 +19,26 @@ const ProductPage = ({ params }: any) => {
   const [activeImage, setActiveImage] = useState(0);
   const [data, setData] = useState<any>("");
 
-  const [value, setValue] = useState(0);
+  const { setSpinner }: any = useContext(GlobalContext);
+
+  const [value, setValue] = useState<number>(1);
+
+  const { data: session } = useSession();
+
+  const router = useRouter();
 
   useEffect(() => {
+    setSpinner(true);
     fetch(`/api/products/${params.id}`)
       .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        setSpinner(false);
+        setData(data);
+      })
+      .catch((err) => {
+        setSpinner(false);
+        console.log(err);
+      });
   }, [params]);
 
   const handleIncrement = () => {
@@ -42,6 +59,35 @@ const ProductPage = ({ params }: any) => {
     }
 
     return stars;
+  };
+
+  const handleOrder = (e: any) => {
+    setSpinner(true);
+    const body = {
+      category: data.category,
+      savings: data.savings,
+      star: data.star,
+      color: data.color,
+      price: data.price,
+      salePrice: data.salePrice,
+      balance: data.balance,
+      title: data.title,
+      description: data.description,
+      images: data.images,
+      email: session?.user?.email,
+      quantity: value,
+    };
+    e.preventDefault();
+
+    fetch("/api/cart", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }).then((response) => {
+      setSpinner(false);
+      if (response.ok) {
+        return router.push("/cart");
+      }
+    });
   };
 
   return (
@@ -116,7 +162,7 @@ const ProductPage = ({ params }: any) => {
             </div>
           </div>
 
-          <div className="h-[50px] flex items-center mt-8 gap-2">
+          <div className="h-[50px] mb-5 flex items-center mt-8 gap-2">
             <span>Ширхэг:</span>
             <div className="flex items-center justify-center">
               <button
@@ -140,7 +186,10 @@ const ProductPage = ({ params }: any) => {
             </div>
           </div>
 
-          <button className="bg-warning hover:bg-slate-600 transition duration-400 rounded-sm text-lg text-white mt-8 py-2 px-20">
+          <button
+            onClick={handleOrder}
+            className="bg-warning hover:bg-slate-600 transition duration-400 rounded-sm text-lg text-white mt-8 py-2 px-20"
+          >
             Захиалах
           </button>
 

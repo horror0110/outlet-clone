@@ -1,13 +1,28 @@
+"use client";
 import Filter from "@/components/Filter";
-import React from "react";
-import data from "../../../utils/data.json";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
 import { BsDot } from "react-icons/bs";
+import { GlobalContext } from "@/context/GlobalContext";
 const thousandify = require("thousandify");
 
-const CategoryPage = () => {
+const CategoryPage = ({ params }: any) => {
+  const [data, setData] = useState<any>();
+  const { setSpinner }: any = useContext(GlobalContext);
+  useEffect(() => {
+    setSpinner(true);
+    fetch(`/api/categories/${params.slug}`, {
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setSpinner(false);
+        setData(data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const star = (starNumber: number) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -33,7 +48,13 @@ const CategoryPage = () => {
             хүчинтэй. Цөөн тохиолдолд дараагийн өдөр үргэлжилж болно.
           </p>
           <div className="flex justify-between items-center gap-10">
-            <span className="text-mainColor text-sm">{data.length}ш бараа</span>
+            {data ? (
+              <span className="text-mainColor text-sm">
+                {data.length}ш бараа
+              </span>
+            ) : (
+              <span>loading...</span>
+            )}
 
             <div className="dropdown z-40 ">
               <label tabIndex={0} className="btn m-1 h-5 bg-white">
@@ -54,51 +75,58 @@ const CategoryPage = () => {
           </div>
 
           <div className="grid grid-cols-4 gap-5 mt-2">
-            {data.map((product: any, index: number) => (
-              <div key={product.id} className="w-[230px] mx-auto h-auto border p-5">
-                <Link href={`/products/${product.id}`}>
-                  <div className="relative w-full h-[200px]">
-                    <Image
-                      src={product.images[0]}
-                      alt={product.title}
-                      fill
-                      className="object-cover"
-                    />
-                    <span className="absolute text-white bg-black rounded-md px-2  text-sm z-30">
-                      {product.savings}% хэмнэнэ
+            {data ? (
+              data.map((product: any, index: number) => (
+                <div
+                  key={product.id}
+                  className="w-[230px] mx-auto h-auto border p-5"
+                >
+                  <Link href={`/products/${product.id}`}>
+                    <div className="relative w-full h-[200px]">
+                      <Image
+                        src={product.images[0]}
+                        alt={product.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <span className="absolute text-white bg-black rounded-md px-2  text-sm z-30">
+                        {product.savings}% хэмнэнэ
+                      </span>
+                    </div>
+                  </Link>
+
+                  <Link href={`/products/${product.id}`} className="text-sm">
+                    {product.title}
+                  </Link>
+                  <div className="flex gap-2 items-center my-3">
+                    <span className="semi-bold">
+                      {thousandify(product.price)}₮
                     </span>
+                    <s className="text-gray-600 text-sm">
+                      {thousandify(product.salePrice)}₮
+                    </s>
                   </div>
-                </Link>
 
-                <Link href={`/products/${product.id}`} className="text-sm">
-                  {product.title}
-                </Link>
-                <div className="flex gap-2 items-center my-3">
-                  <span className="semi-bold">
-                    {thousandify(product.price)}₮
-                  </span>
-                  <s className="text-gray-600 text-sm">
-                    {thousandify(product.salePrice)}₮
-                  </s>
+                  <div className="flex items-center gap-1 mb-1">
+                    <div className="flex">{star(product.star)}</div>
+
+                    <span className="text-sm"> {product.star} үнэлгээ</span>
+                  </div>
+
+                  {product.balance ? (
+                    <span className="flex items-center text-sm text-green-600 font-semibold">
+                      <BsDot size={40} /> Нөөцөд байгаа
+                    </span>
+                  ) : (
+                    <span className="flex items-center text-sm text-red-600 text-semibold">
+                      <BsDot size={40} /> Дууссан
+                    </span>
+                  )}
                 </div>
-
-                <div className="flex items-center gap-1 mb-1">
-                  <div className="flex">{star(product.star)}</div>
-
-                  <span className="text-sm"> {product.star} үнэлгээ</span>
-                </div>
-
-                {product.balance ? (
-                  <span className="flex items-center text-sm text-green-600 font-semibold">
-                    <BsDot size={40} /> Нөөцөд байгаа
-                  </span>
-                ) : (
-                  <span className="flex items-center text-sm text-red-600 text-semibold">
-                    <BsDot size={40} /> Дууссан
-                  </span>
-                )}
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>loading...</p>
+            )}
           </div>
         </div>
       </div>

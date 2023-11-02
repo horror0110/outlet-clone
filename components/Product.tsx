@@ -1,23 +1,30 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { BsChevronRight, BsChevronLeft, BsDot } from "react-icons/bs";
 import { AiFillStar } from "react-icons/ai";
 import Link from "next/link";
+import { GlobalContext } from "@/context/GlobalContext";
 const thousandify = require("thousandify");
 
 const Product = () => {
   const [swiper, setSwiper] = useState<any>(null);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
+  const { setSpinner , setDataValue }: any = useContext(GlobalContext);
 
   useEffect(() => {
+    setSpinner(true);
     fetch("/api/products", {
       headers: { "content-type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        setSpinner(false);
+        setData(data);
+        setDataValue(data)
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -49,11 +56,11 @@ const Product = () => {
           390: {
             slidesPerView: 1,
           },
-          // When window width is >= 768px
+
           768: {
             slidesPerView: 2,
           },
-          // When window width is >= 1024px
+
           1024: {
             slidesPerView: 4,
           },
@@ -69,7 +76,10 @@ const Product = () => {
         <div className="">
           {data.map((product: any, index: number) => (
             <SwiperSlide key={index}>
-              <div key={product.id} className="w-[250px] mx-auto h-auto border p-5">
+              <div
+                key={product.id}
+                className="w-[250px] mx-auto h-auto border p-5"
+              >
                 <Link href={`/products/${product.id}`}>
                   <div className="relative w-full h-[200px]">
                     <Image

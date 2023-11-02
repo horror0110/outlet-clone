@@ -1,15 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import data from "../utils/data.json";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { GlobalContext } from "@/context/GlobalContext";
 
 const Dropdown = () => {
   const [searchValue, setSearchValue] = useState<string>("");
 
-  const [openDropDown, setOpenDropDown] = useState(false);
 
-  const filteredProducts = data.filter((product) => {
+  const { dataValue }: any = useContext(GlobalContext);
+
+  const filteredProducts = dataValue.filter((product: any) => {
     return searchValue.toLowerCase() === ""
       ? ""
       : product.title.toLowerCase().includes(searchValue);
@@ -19,9 +20,7 @@ const Dropdown = () => {
       <div className="form-control">
         <div className="input-group">
           <select className="select select-bordered">
-            <option selected>
-              Бүх категори
-            </option>
+            <option selected>Бүх категори</option>
             <option>T-shirts</option>
             <option>Mugs</option>
           </select>
@@ -66,7 +65,7 @@ const Dropdown = () => {
           <div className="flex flex-col gap-5 max-h-[300px] overflow-y-scroll">
             {filteredProducts.length > 0 ? (
               <div>
-                {filteredProducts.map((product, index) => (
+                {filteredProducts.map((product: any, index: number) => (
                   <Link
                     key={product.id}
                     href={`/products/${product.id}`}
