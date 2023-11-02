@@ -30,9 +30,6 @@ const CheckoutPage = () => {
 
   const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
-  useEffect(() => {
-    setIsCheckoutPage(true);
-  }, []);
 
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
