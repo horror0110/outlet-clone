@@ -26,7 +26,7 @@ const Product = () => {
         setDataValue(data)
       })
       .catch((err) => console.log(err));
-  }, [setDataValue , setData]);
+  }, [setDataValue , setData , setSpinner]);
 
   const star = (starNumber: number) => {
     const stars = [];
