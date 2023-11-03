@@ -30,6 +30,19 @@ const CheckoutPage = () => {
 
   const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
+  const clearItemsInCheckout = () => {
+    fetch(`/api/checkout/${email}`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data); // Log the response from the server
+        setData([]); // Reset the items in the checkout on the client side
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     setIsCheckoutPage(true);
   }, []);
@@ -46,20 +59,9 @@ const CheckoutPage = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [ordered, isCheckoutPage]);
+  }, [ordered, isCheckoutPage , clearItemsInCheckout]);
 
-  const clearItemsInCheckout = () => {
-    fetch(`/api/checkout/${email}`, {
-      method: "DELETE",
-      headers: { "content-type": "application/json" },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data); // Log the response from the server
-        setData([]); // Reset the items in the checkout on the client side
-      })
-      .catch((err) => console.log(err));
-  };
+
   return (
     <div className="mt-48 mx-20  h-auto">
       <div className="flex gap-10">
@@ -167,7 +169,7 @@ const CheckoutPage = () => {
           <p className="text-sm mt-2 bg-gray-200 p-2">
             Бүтээгдэхүүний дээрх үнийн дүнг нийлүүлэгчийн Хаан Банк 5301 3958 08
             /Наранцацрал/ дансанд шилжүүлэхдээ гүйлгээний утга дээр зөвхөн
-            утасны дугаараа бичнэ үү. Гүйлгээ хиймэгцээ "Захиалах" товч
+            утасны дугаараа бичнэ үү. Гүйлгээ хиймэгцээ Захиалах товч
             дарсанаар Захиалга амжилттай баталгаажна
           </p>
           <button className="btn btn-warning mt-10">
@@ -178,7 +180,7 @@ const CheckoutPage = () => {
         <div>
           {data ? (
             data.map((product: any, index: number) => (
-              <div className="flex items-center gap-3">
+              <div key={index} className="flex items-center gap-3">
                 <div className="relative">
                   <Image
                     src={product.image}
