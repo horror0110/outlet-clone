@@ -12,8 +12,8 @@ const thousandify = require("thousandify");
 const CategoryPage = ({ params }: any) => {
   const [data, setData] = useState<any>();
   const [count, setCount] = useState<any>();
-  const [colorFilter , setColorFilter] = useState<any>("");
-  const [sortData , setSortData] = useState<any>("");
+  const [colorFilter, setColorFilter] = useState<any>("");
+  const [sortData, setSortData] = useState<any>("");
 
   const searchParams: any = useSearchParams();
 
@@ -21,18 +21,21 @@ const CategoryPage = ({ params }: any) => {
 
   const router = useRouter();
 
-  const POST_PER_PAGE = 2;
+  const POST_PER_PAGE = 1;
 
   const hasPrev = POST_PER_PAGE * (page - 1) > 0;
   const hasNext = POST_PER_PAGE * (page - 1) + POST_PER_PAGE < count;
 
   const { setSpinner }: any = useContext(GlobalContext);
-  
+
   useEffect(() => {
     setSpinner(true);
-    fetch(`/api/categories/${params.slug}?page=${page}&color=${colorFilter}&sort=${sortData}`, {
-      headers: { "content-type": "application/json" },
-    })
+    fetch(
+      `/api/categories/${params.slug}?page=${page}&color=${colorFilter}&sort=${sortData}`,
+      {
+        headers: { "content-type": "application/json" },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         setSpinner(false);
@@ -40,7 +43,7 @@ const CategoryPage = ({ params }: any) => {
         setCount(data.count);
       })
       .catch((err) => console.log(err));
-  }, [page , colorFilter , sortData , setSpinner , params.slug]);
+  }, [page, colorFilter, sortData, setSpinner, params.slug]);
 
   const star = (starNumber: number) => {
     const stars = [];
@@ -53,7 +56,7 @@ const CategoryPage = ({ params }: any) => {
   };
 
   const changeSortData = (orderType: string) => {
-    setSortData(orderType)
+    setSortData(orderType);
   };
   return (
     <div className="mt-48 mx-10">
@@ -91,10 +94,14 @@ const CategoryPage = ({ params }: any) => {
                   <button onClick={() => changeSortData("")}>Энгийн</button>
                 </li>
                 <li>
-                  <button onClick={() => changeSortData("asc")}>Үнэ өсөхөөр</button>
+                  <button onClick={() => changeSortData("asc")}>
+                    Үнэ өсөхөөр
+                  </button>
                 </li>
                 <li>
-                  <button onClick={() => changeSortData("desc")}>Үнэ буурахаар</button>
+                  <button onClick={() => changeSortData("desc")}>
+                    Үнэ буурахаар
+                  </button>
                 </li>
               </ul>
             </div>

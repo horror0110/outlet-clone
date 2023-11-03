@@ -26,7 +26,7 @@ const CheckoutPage = () => {
         setData(data.data);
       })
       .catch((err) => console.log(err));
-  }, [session , email , setSpinner]);
+  }, [session, email, setSpinner]);
 
   const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
@@ -59,8 +59,7 @@ const CheckoutPage = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [ordered, isCheckoutPage , clearItemsInCheckout]);
-
+  }, [ordered, isCheckoutPage, clearItemsInCheckout]);
 
   return (
     <div className="mt-48 mx-20  h-auto">
@@ -169,8 +168,8 @@ const CheckoutPage = () => {
           <p className="text-sm mt-2 bg-gray-200 p-2">
             Бүтээгдэхүүний дээрх үнийн дүнг нийлүүлэгчийн Хаан Банк 5301 3958 08
             /Наранцацрал/ дансанд шилжүүлэхдээ гүйлгээний утга дээр зөвхөн
-            утасны дугаараа бичнэ үү. Гүйлгээ хиймэгцээ Захиалах товч
-            дарсанаар Захиалга амжилттай баталгаажна
+            утасны дугаараа бичнэ үү. Гүйлгээ хиймэгцээ Захиалах товч дарсанаар
+            Захиалга амжилттай баталгаажна
           </p>
           <button className="btn btn-warning mt-10">
             Захиалгыг баталгаажуулах

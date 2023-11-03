@@ -13,7 +13,7 @@ const CartPage = () => {
   const { data: session, status }: any = useSession();
 
   const [data, setData] = useState<any>([]);
-  const { setSpinner , setCartCount }: any = useContext(GlobalContext);
+  const { setSpinner, setCartCount }: any = useContext(GlobalContext);
 
   const router = useRouter();
 
@@ -45,8 +45,8 @@ const CartPage = () => {
         setData(data.data);
       })
       .catch((err) => console.log(err));
-  }, [session , setSpinner , email]);
-  setCartCount(data.length)
+  }, [session, setSpinner, email]);
+  setCartCount(data.length);
 
   const total = calculateTotalPrice(data);
 

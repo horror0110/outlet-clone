@@ -12,7 +12,7 @@ const thousandify = require("thousandify");
 const Product = () => {
   const [swiper, setSwiper] = useState<any>(null);
   const [data, setData] = useState<any>([]);
-  const { setSpinner , setDataValue }:any = useContext(GlobalContext);
+  const { setSpinner, setDataValue }: any = useContext(GlobalContext);
 
   useEffect(() => {
     setSpinner(true);
@@ -23,10 +23,10 @@ const Product = () => {
       .then((data) => {
         setSpinner(false);
         setData(data);
-        setDataValue(data)
+        setDataValue(data);
       })
       .catch((err) => console.log(err));
-  }, [setDataValue , setData , setSpinner]);
+  }, [setDataValue, setData, setSpinner]);
 
   const star = (starNumber: number) => {
     const stars = [];

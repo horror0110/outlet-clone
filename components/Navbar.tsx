@@ -5,14 +5,19 @@ import { GiGymBag } from "react-icons/gi";
 
 import Dropdown from "./Dropdown";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { GlobalContext } from "@/context/GlobalContext";
+import { AiFillCaretDown } from "react-icons/ai";
 
 const Navbar = () => {
   const [data, setData] = useState([]);
-  const {data:session , status} = useSession();
+  const { data: session, status } = useSession();
 
-  const {cartCount}:any = useContext(GlobalContext);
+  const { cartCount }: any = useContext(GlobalContext);
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   useEffect(() => {
     fetch("/api/categories", {
@@ -22,7 +27,6 @@ const Navbar = () => {
       .then((data) => setData(data))
       .catch((err) => console.log(err));
   }, []);
-
 
   return (
     <div className="flex flex-col fixed top-0 left-0 w-full z-50">
@@ -38,17 +42,37 @@ const Navbar = () => {
         </Link>
 
         <Dropdown />
-          {status === "unauthenticated" ?     <div className="flex gap-2 text-[#a3afef]">
-          <Link href="/login">Нэвтрэх</Link>|
-          <Link href="/register">Бүртгүүлэх</Link>
-        </div> : <span className="text-white"><span className="text-warning">Сайн байна уу?</span> {session?.user.name}</span>}
-    
+        {status === "unauthenticated" ? (
+          <div className="flex gap-2 text-[#a3afef]">
+            <Link href="/login">Нэвтрэх</Link>|
+            <Link href="/register">Бүртгүүлэх</Link>
+          </div>
+        ) : (
+          <span className="text-white">
+            <span className="text-warning">Сайн байна уу? </span>
+            <span className="uppercase">{session?.user.name}</span>
+
+            <div className="dropdown dropdown-bottom text-black  ">
+              <label tabIndex={0} className="btn m-1 bg-[#232f3f] text-white border-none">
+                <AiFillCaretDown />
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <button onClick={handleSignOut}>гарах</button>
+                </li>
+              </ul>
+            </div>
+          </span>
+        )}
 
         <Link href="/cart" className="flex items-center gap-3">
           <div className="relative">
             <GiGymBag color="white" size={25} />
             <span className="text-white absolute right-[-5px] top-[-15px] bg-warning rounded-full px-1   ">
-             {cartCount}
+              {cartCount}
             </span>
           </div>
 

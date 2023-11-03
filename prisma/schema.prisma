@@ -26,7 +26,7 @@ model Category {
 
 model Product {
   id          String   @id @default(cuid()) @map("_id")
-  category    String?
+  category    String[]
   savings     Int?
   star        Int?
   color       String[]
@@ -40,7 +40,7 @@ model Product {
 
 model Cart {
   id          String   @id @default(cuid()) @map("_id")
-  category    String
+  category    String[]
   savings     Int
   star        Int
   color       String[]

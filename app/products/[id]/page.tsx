@@ -39,7 +39,7 @@ const ProductPage = ({ params }: any) => {
         setSpinner(false);
         console.log(err);
       });
-  }, [params , setSpinner]);
+  }, [params, setSpinner]);
 
   const handleIncrement = () => {
     setValue(value + 1);
@@ -185,13 +185,21 @@ const ProductPage = ({ params }: any) => {
               </button>
             </div>
           </div>
-
-          <button
-            onClick={handleOrder}
-            className="bg-warning hover:bg-slate-600 transition duration-400 rounded-sm text-lg text-white mt-8 py-2 px-20"
-          >
-            Захиалах
-          </button>
+          {data.balance ? (
+            <button
+              onClick={handleOrder}
+              className="bg-warning hover:bg-slate-600 transition duration-400 rounded-sm text-lg text-white mt-8 py-2 px-20"
+            >
+              Захиалах
+            </button>
+          ) : (
+            <button
+              disabled
+              className="bg-primary transition duration-400 rounded-sm text-lg text-white mt-8 py-2 px-20"
+            >
+              Дууссан
+            </button>
+          )}
 
           <div className="mt-5 flex items-center">
             <span className="flex items-center">

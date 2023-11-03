@@ -3,10 +3,42 @@ import React, { useContext, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { GlobalContext } from "@/context/GlobalContext";
+import { useRouter } from "next/navigation";
 
 const Dropdown = () => {
   const [searchValue, setSearchValue] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const router = useRouter();
 
+  const data = [
+    {
+      id: 1,
+      title: "Аялал",
+      slug: "aylal",
+    },
+    {
+      id: 2,
+      title: "Тавилга",
+      slug: "tavilga",
+    },
+    {
+      id: 3,
+      title: "Гал тогооны хэрэгсэл",
+      slug: "gal-togoonii-heregsel",
+    },
+  ];
+
+  const handleCategoryChange = (e: any) => {
+    const categorySlug = e.target.value;
+
+    setSelectedCategory(categorySlug);
+
+    if (categorySlug) {
+      router.push(`/collections/${categorySlug}`);
+    } else {
+      router.push("/");
+    }
+  };
 
   const { dataValue }: any = useContext(GlobalContext);
 
@@ -19,10 +51,17 @@ const Dropdown = () => {
     <div className="relative  flex items-center gap-2">
       <div className="form-control">
         <div className="input-group">
-          <select className="select select-bordered">
-            <option selected>Бүх категори</option>
-            <option>T-shirts</option>
-            <option>Mugs</option>
+          <select
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="select select-bordered"
+          >
+            <option value="">Бүх категори</option>
+            {data.map((el: any, index: number) => (
+              <option key={el.id} value={el.slug}>
+                {el.title}
+              </option>
+            ))}
           </select>
         </div>
       </div>

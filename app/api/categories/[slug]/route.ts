@@ -9,12 +9,14 @@ export const GET = async (request: Request, { params }: any) => {
   const color: string | null = searchParams.get("color");
   const sort: string | null = searchParams.get("sort");
 
-  const POST_PER_PAGE = 2;
+  const POST_PER_PAGE = 1;
 
   const query: any = {
     take: POST_PER_PAGE,
     skip: POST_PER_PAGE * (page - 1),
-    where: { category: params.slug },
+    where: {
+      category: {has: params.slug},
+    },
     orderBy: {
       price: sort === "asc" ? "asc" : "desc",
     },

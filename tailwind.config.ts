@@ -1,16 +1,16 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-        textColor: {
-          mainColor: '#232f3f'
-        }
+      textColor: {
+        mainColor: "#232f3f",
+      },
     },
   },
 
@@ -19,27 +19,27 @@ const config: Config = {
       {
         mytheme: {
         
-"primary": "#f76c88",
+"primary": "#e053b3",
         
-"secondary": "#d7f276",
+"secondary": "#1864dd",
         
-"accent": "#2a8ba3",
+"accent": "#ffdf3f",
         
-"neutral": "#24212c",
+"neutral": "#282933",
         
-"base-100": "#f1f2f8",
+"base-100": "#f4f3f6",
         
-"info": "#69a6f7",
+"info": "#355dde",
         
-"success": "#21a176",
+"success": "#78edd8",
         
-"warning": "#e7bd18",
+"warning": "#eece3f",
         
-"error": "#f03869",
+"error": "#ec7b6a",
         },
       },
     ],
   },
   plugins: [require("daisyui")],
-}
-export default config
+};
+export default config;
