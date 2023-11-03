@@ -40,7 +40,7 @@ const CategoryPage = ({ params }: any) => {
         setCount(data.count);
       })
       .catch((err) => console.log(err));
-  }, [page , colorFilter , sortData]);
+  }, [page , colorFilter , sortData , setSpinner , params.slug]);
 
   const star = (starNumber: number) => {
     const stars = [];

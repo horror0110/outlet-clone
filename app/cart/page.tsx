@@ -45,8 +45,7 @@ const CartPage = () => {
         setData(data.data);
       })
       .catch((err) => console.log(err));
-  }, [session]);
-
+  }, [session , setSpinner , email]);
   setCartCount(data.length)
 
   const total = calculateTotalPrice(data);

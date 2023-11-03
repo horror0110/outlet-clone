@@ -39,7 +39,7 @@ const ProductPage = ({ params }: any) => {
         setSpinner(false);
         console.log(err);
       });
-  }, [params]);
+  }, [params , setSpinner]);
 
   const handleIncrement = () => {
     setValue(value + 1);

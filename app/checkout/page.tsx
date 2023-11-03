@@ -26,7 +26,7 @@ const CheckoutPage = () => {
         setData(data.data);
       })
       .catch((err) => console.log(err));
-  }, [session]);
+  }, [session , email , setSpinner]);
 
   const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
