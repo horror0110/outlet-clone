@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/context/GlobalContext";
+import Slider from "@/components/Slider";
 
 const thousandify = require("thousandify");
 
@@ -19,11 +20,13 @@ const ProductPage = ({ params }: any) => {
   const [activeImage, setActiveImage] = useState(0);
   const [data, setData] = useState<any>("");
 
+  const [bottomData , setBottomData] = useState<any>([])
+
   const { setSpinner }: any = useContext(GlobalContext);
 
   const [value, setValue] = useState<number>(1);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const router = useRouter();
 
@@ -40,6 +43,22 @@ const ProductPage = ({ params }: any) => {
         console.log(err);
       });
   }, [params, setSpinner]);
+
+  useEffect(() => {
+    if (data && data.category && data.category[0]) {
+      setSpinner(true);
+      fetch(`/api/categories/${data.category[0]}?page=1`)
+        .then((response) => response.json())
+        .then((data) => {
+          setSpinner(false);
+          setBottomData(data.data);
+        })
+        .catch((err) => {
+          setSpinner(false);
+          console.log(err);
+        });
+    }
+  }, [data, setSpinner]);
 
   const handleIncrement = () => {
     setValue(value + 1);
@@ -62,6 +81,9 @@ const ProductPage = ({ params }: any) => {
   };
 
   const handleOrder = (e: any) => {
+    if (status === "unauthenticated") {
+      return router?.push("/login");
+    }
     setSpinner(true);
     const body = {
       category: data.category,
@@ -219,7 +241,7 @@ const ProductPage = ({ params }: any) => {
         <h1 className="text-2xl text-mainColor mt-10 mb-5 ml-10">
           Санал болгох
         </h1>
-        <Product />
+        <Slider data={bottomData}/>
       </div>
     </div>
   );
