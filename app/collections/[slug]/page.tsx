@@ -6,23 +6,42 @@ import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
 import { BsDot } from "react-icons/bs";
 import { GlobalContext } from "@/context/GlobalContext";
+import { useRouter, useSearchParams } from "next/navigation";
 const thousandify = require("thousandify");
 
 const CategoryPage = ({ params }: any) => {
   const [data, setData] = useState<any>();
+  const [count, setCount] = useState<any>();
+  const [colorFilter , setColorFilter] = useState<any>("");
+  const [sortData , setSortData] = useState<any>("");
+
+  const searchParams: any = useSearchParams();
+
+  const page = parseInt(searchParams.get("page")) || 1;
+
+  const router = useRouter();
+
+  const POST_PER_PAGE = 2;
+
+  const hasPrev = POST_PER_PAGE * (page - 1) > 0;
+  const hasNext = POST_PER_PAGE * (page - 1) + POST_PER_PAGE < count;
+
   const { setSpinner }: any = useContext(GlobalContext);
+  
   useEffect(() => {
     setSpinner(true);
-    fetch(`/api/categories/${params.slug}`, {
+    fetch(`/api/categories/${params.slug}?page=${page}&color=${colorFilter}&sort=${sortData}`, {
       headers: { "content-type": "application/json" },
     })
       .then((response) => response.json())
       .then((data) => {
         setSpinner(false);
         setData(data.data);
+        setCount(data.count);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [page , colorFilter , sortData]);
+
   const star = (starNumber: number) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -32,11 +51,15 @@ const CategoryPage = ({ params }: any) => {
 
     return stars;
   };
+
+  const changeSortData = (orderType: string) => {
+    setSortData(orderType)
+  };
   return (
     <div className="mt-48 mx-10">
       <div className="flex gap-10">
         <div className="w-[25%]">
-          <Filter />
+          <Filter setColorFilter={setColorFilter} colorFilter={colorFilter} />
         </div>
 
         <div className="w-[75%] border border-gray-200 p-5">
@@ -65,10 +88,13 @@ const CategoryPage = ({ params }: any) => {
                 className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a>Item 1</a>
+                  <button onClick={() => changeSortData("")}>Энгийн</button>
                 </li>
                 <li>
-                  <a>Item 2</a>
+                  <button onClick={() => changeSortData("asc")}>Үнэ өсөхөөр</button>
+                </li>
+                <li>
+                  <button onClick={() => changeSortData("desc")}>Үнэ буурахаар</button>
                 </li>
               </ul>
             </div>
@@ -127,6 +153,23 @@ const CategoryPage = ({ params }: any) => {
             ) : (
               <p>loading...</p>
             )}
+          </div>
+
+          <div className="join grid grid-cols-2 mt-5">
+            <button
+              disabled={!hasPrev}
+              onClick={() => router.push(`?page=${page - 1}`)}
+              className="join-item btn btn-outline "
+            >
+              Previous page
+            </button>
+            <button
+              disabled={!hasNext}
+              onClick={() => router.push(`?page=${page + 1}`)}
+              className="join-item btn btn-outline"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

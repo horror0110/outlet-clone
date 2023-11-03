@@ -4,12 +4,16 @@ import Link from "next/link";
 import { GiGymBag } from "react-icons/gi";
 
 import Dropdown from "./Dropdown";
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { GlobalContext } from "@/context/GlobalContext";
 
 const Navbar = () => {
   const [data, setData] = useState([]);
   const {data:session , status} = useSession();
+
+  const {cartCount}:any = useContext(GlobalContext);
+
   useEffect(() => {
     fetch("/api/categories", {
       headers: { "content-type": "application/json" },
@@ -18,6 +22,8 @@ const Navbar = () => {
       .then((data) => setData(data))
       .catch((err) => console.log(err));
   }, []);
+
+
   return (
     <div className="flex flex-col fixed top-0 left-0 w-full z-50">
       <div className="bg-[#232f3e] h-[110px] flex justify-between items-center px-10 ">
@@ -42,7 +48,7 @@ const Navbar = () => {
           <div className="relative">
             <GiGymBag color="white" size={25} />
             <span className="text-white absolute right-[-5px] top-[-15px] bg-warning rounded-full px-1   ">
-              0
+             {cartCount}
             </span>
           </div>
 

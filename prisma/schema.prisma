@@ -36,7 +36,6 @@ model Product {
   title       String?
   description String?
   images      String[]
-  cartId      String?
 }
 
 model Cart {

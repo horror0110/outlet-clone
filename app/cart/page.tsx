@@ -13,7 +13,7 @@ const CartPage = () => {
   const { data: session, status }: any = useSession();
 
   const [data, setData] = useState<any>([]);
-  const { setSpinner }: any = useContext(GlobalContext);
+  const { setSpinner , setCartCount }: any = useContext(GlobalContext);
 
   const router = useRouter();
 
@@ -37,14 +37,17 @@ const CartPage = () => {
 
   useEffect(() => {
     setSpinner(true);
-    fetch(`/api/checkout/${email}`)
+    fetch(`/api/cart/${email}`)
       .then((response) => response.json())
       .then((data) => {
         setSpinner(false);
+
         setData(data.data);
       })
       .catch((err) => console.log(err));
-  }, [email, setSpinner]);
+  }, [session]);
+
+  setCartCount(data.length)
 
   const total = calculateTotalPrice(data);
 
@@ -67,7 +70,7 @@ const CartPage = () => {
   const handleCheckout = (e: any) => {
     e.preventDefault();
 
-    setSpinner(true)
+    setSpinner(true);
 
     const checkoutData = data.map((item: any, index: number) => {
       return {
@@ -96,10 +99,6 @@ const CartPage = () => {
         responses.forEach((response, index) => {
           setSpinner(false);
           router?.push("/checkout");
-          console.log(
-            `Checkout for item ${index + 1} successful. Response:`,
-            response
-          );
         });
       })
       .catch((error) => {
