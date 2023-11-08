@@ -4,7 +4,7 @@ import Link from "next/link";
 import { GiGymBag } from "react-icons/gi";
 
 import Dropdown from "./Dropdown";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { GlobalContext } from "@/context/GlobalContext";
 import { AiFillCaretDown } from "react-icons/ai";
@@ -12,6 +12,8 @@ import { AiFillCaretDown } from "react-icons/ai";
 const Navbar = () => {
   const [data, setData] = useState([]);
   const { data: session, status } = useSession();
+
+  console.log(session);
 
   const { cartCount }: any = useContext(GlobalContext);
 
@@ -53,13 +55,22 @@ const Navbar = () => {
             <span className="uppercase">{session?.user.name}</span>
 
             <div className="dropdown dropdown-bottom text-black  ">
-              <label tabIndex={0} className="btn m-1 bg-[#232f3f] text-white border-none">
+              <label
+                tabIndex={0}
+                className="btn m-1 bg-[#232f3f] text-white border-none"
+              >
                 <AiFillCaretDown />
               </label>
               <ul
                 tabIndex={0}
                 className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
               >
+                {status === "authenticated" && session?.user?.isAdmin && (
+                  <li>
+                    <Link href="/admin/add">бараа нэмэх</Link>
+                  </li>
+                )}
+
                 <li>
                   <button onClick={handleSignOut}>гарах</button>
                 </li>

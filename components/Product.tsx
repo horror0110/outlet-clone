@@ -11,7 +11,6 @@ import Slider from "./Slider";
 const thousandify = require("thousandify");
 
 const Product = () => {
-  const [swiper, setSwiper] = useState<any>(null);
   const [data, setData] = useState<any>([]);
   const { setSpinner, setDataValue }: any = useContext(GlobalContext);
 

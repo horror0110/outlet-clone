@@ -6,7 +6,6 @@ const thousandify = require("thousandify");
 import { FiShoppingCart } from "react-icons/fi";
 import Link from "next/link";
 import { GlobalContext } from "@/context/GlobalContext";
-import { calculateTotalPrice } from "@/components/CartUtils";
 import { useRouter } from "next/navigation";
 
 const CartPage = () => {
@@ -16,6 +15,16 @@ const CartPage = () => {
   const { setSpinner, setCartCount }: any = useContext(GlobalContext);
 
   const router = useRouter();
+
+   const calculateTotalPrice = (items:any) => {
+    let total = 0;
+    for (const item of items) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  };
+
+  const total = calculateTotalPrice(data);
 
   const handleIncrement = (index: number) => {
     const updatedData = [...data];
@@ -48,7 +57,7 @@ const CartPage = () => {
   }, [session, setSpinner, email]);
   setCartCount(data.length);
 
-  const total = calculateTotalPrice(data);
+
 
   const handleDelete: any = (id: any) => {
     setSpinner(true);

@@ -21,7 +21,7 @@ const CategoryPage = ({ params }: any) => {
 
   const router = useRouter();
 
-  const POST_PER_PAGE = 1;
+  const POST_PER_PAGE = 4;
 
   const hasPrev = POST_PER_PAGE * (page - 1) > 0;
   const hasNext = POST_PER_PAGE * (page - 1) + POST_PER_PAGE < count;

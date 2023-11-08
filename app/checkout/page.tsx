@@ -16,6 +16,7 @@ const CheckoutPage = () => {
 
   const [data, setData] = useState<any>([]);
   const [ordered, setOrdered] = useState(false);
+  const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
   useEffect(() => {
     setSpinner(true);
@@ -27,8 +28,6 @@ const CheckoutPage = () => {
       })
       .catch((err) => console.log(err));
   }, [session, email, setSpinner]);
-
-  const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
   const clearItemsInCheckout = () => {
     fetch(`/api/checkout/${email}`, {

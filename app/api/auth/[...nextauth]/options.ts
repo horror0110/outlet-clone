@@ -1,9 +1,27 @@
-import type { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User, getServerSession } from "next-auth";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "../../../libs/prismadb";
+import { prisma } from "../../../libs/prismadb";
 import bcrypt from "bcrypt";
 
+declare module "next-auth" {
+  interface Session {
+    user: User & {
+      isAdmin: Boolean;
+    };
+  }
+}
+declare module "next-auth/jwt" {
+  interface JWT {
+    isAdmin: Boolean;
+  }
+}
+
 export const options: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -51,22 +69,24 @@ export const options: NextAuthOptions = {
     error: "/login",
   },
   callbacks: {
-    session: async ({ session, token, user }) => {
-      if (session?.user) {
-        session.user.id = token.uid;
+    async session({ token, session }) {
+      if (token) {
+        session.user.isAdmin = token.isAdmin;
       }
       return session;
     },
-    jwt: async ({ user, token }) => {
-      if (user) {
-        token.uid = user.id;
-      }
+    async jwt({ token }) {
+      const userInDb = await prisma.user.findUnique({
+        where: {
+          email: token.email!,
+        },
+      });
+      token.isAdmin = userInDb?.isAdmin!;
       return token;
     },
-  },
-  session: {
-    strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
 };
+
+export const getAuthSession = () => getServerSession(options);

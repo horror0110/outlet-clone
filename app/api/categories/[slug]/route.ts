@@ -1,4 +1,4 @@
-import prisma from "../../../libs/prismadb";
+import {prisma} from "../../../libs/prismadb";
 import { NextResponse } from "next/server";
 
 export const GET = async (request: Request, { params }: any) => {
@@ -9,7 +9,7 @@ export const GET = async (request: Request, { params }: any) => {
   const color: string | null = searchParams.get("color");
   const sort: string | null = searchParams.get("sort");
 
-  const POST_PER_PAGE = 2;
+  const POST_PER_PAGE = 4;
 
   const query: any = {
     take: POST_PER_PAGE,

@@ -1,5 +1,4 @@
-import { getRequestMeta } from "next/dist/server/request-meta";
-import prisma from "../../../libs/prismadb";
+import { prisma } from "../../../libs/prismadb";
 import { NextResponse } from "next/server";
 
 export const GET = async (request: Request, { params }: any) => {
@@ -15,18 +14,15 @@ export const GET = async (request: Request, { params }: any) => {
   }
 };
 
-export const DELETE = async(request:Request , {params}:any)=>{
+export const DELETE = async (request: Request, { params }: any) => {
   try {
-
     const product = await prisma.cart.delete({
-      where: {id: params.email}
-    })
+      where: { id: params.email },
+    });
 
     return NextResponse.json({ data: product }, { status: 200 });
-
-
-  }catch(err){
+  } catch (err) {
     console.log("server error", err);
     return NextResponse.error();
   }
-}
+};
