@@ -6,7 +6,7 @@ const AddProductPage = () => {
     title: "",
     category: [],
     images: [],
-    balance: "",
+    balance: false,
     color: [],
     description: "",
     price: "",
@@ -91,6 +91,20 @@ const AddProductPage = () => {
       })
       .catch((err) => console.log(err));
   };
+
+  const handleBalance = (e: any) => {
+    if (e.target.value === "Байгаа") {
+      setFormData((prevFormData: any) => ({
+        ...prevFormData,
+        balance: true,
+      }));
+    } else if (e.target.value === "Дууссан") {
+      setFormData((prevFormData: any) => ({
+        ...prevFormData,
+        balance: false,
+      }));
+    }
+  };
   return (
     <div className="container mx-10 mt-48">
       <form onSubmit={handleCreate} className="max-w-md mx-auto">
@@ -139,15 +153,15 @@ const AddProductPage = () => {
           <label htmlFor="balance" className="block font-semibold">
             balance
           </label>
-          <input
-            onChange={(e) => {
-              setFormData({ ...formData, balance: Boolean });
-            }}
-            type="boolean"
-            id="balance"
-            name="balance "
-            className="w-full border p-2"
-          />
+          <select onChange={handleBalance} className="select w-full max-w-xs">
+            <option disabled selected>
+              Үлдэгдэл байгаа эсэх
+            </option>
+
+            <option>Байгаа</option>
+
+            <option>Дууссан</option>
+          </select>
         </div>
 
         <div className="mb-4">
